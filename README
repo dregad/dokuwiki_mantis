@@ -1,0 +1,11 @@
+DokuWiki / Mantis integration
+=============================
+
+This repository contains DokuWiki tools for use with MantisBT
+
+- Authentication back-end
+  Allows to use MantisBT to login to DokuWiki
+
+- Syntax plugin
+  Provides Wiki syntax for hyperlinks to issues in the Bugtracker
+
