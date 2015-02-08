@@ -25,12 +25,15 @@ if (!defined('DOKU_INC')) die();
 
             // display logo and wiki title in a link to the home page
             tpl_link(
-                wl(),
+                '/',
                 '<img src="'.$logo.'" '.$logoSize[3].' alt="" />',
                 'accesskey="h" title="[H]"'
             );
-        ?></div>
-        <div id="wiki">Wiki</div></h1>
+            ?></div>
+            <div id="wiki"><?php
+                tpl_link( wl(), 'Wiki');
+            ?></div>
+        </h1>
     </div>
 
     <div class="tools group">
