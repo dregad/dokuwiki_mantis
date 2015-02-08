@@ -9,3 +9,4 @@ This repository contains DokuWiki tools for use with MantisBT
 - Syntax plugin
   Provides Wiki syntax for hyperlinks to issues in the Bugtracker
 
+- Mantis template, based on DokuWiki's default
