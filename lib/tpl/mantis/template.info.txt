@@ -1,7 +1,7 @@
-base     dokuwiki
-author   Anika Henke
-email    anika@selfthinker.org
-date     2014-06-04
-name     DokuWiki Template
-desc     DokuWiki's default template since 2012
+base     mantis
+author   Damien Regad
+email    dregad@mantisbt.org
+date     2015-02-07
+name     MantisBT Wiki Template 2015
+desc     MantisBT Wiki template derived from 'dokuwiki' template
 url      http://www.dokuwiki.org/template:dokuwiki
