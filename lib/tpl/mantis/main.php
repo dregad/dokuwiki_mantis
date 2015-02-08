@@ -1,131 +1,110 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <?php
 /**
- * DokuWiki Default Template
+ * DokuWiki Default Template 2012
  *
- * This is the template you need to change for the overall look
- * of DokuWiki.
- *
- * You should leave the doctype at the very top - It should
- * always be the very first line of a document.
- *
- * @link   http://wiki.splitbrain.org/wiki:tpl:templates
- * @author Andreas Gohr <andi@splitbrain.org>
+ * @link     http://dokuwiki.org/template
+ * @author   Anika Henke <anika@selfthinker.org>
+ * @author   Clarence Lee <clarencedglee@gmail.com>
+ * @license  GPL 2 (http://www.gnu.org/licenses/gpl.html)
  */
-?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $conf['lang']?>"
- lang="<?php echo $conf['lang']?>" dir="<?php echo $lang['direction']?>">
+
+if (!defined('DOKU_INC')) die(); /* must be run from within DokuWiki */
+header('X-UA-Compatible: IE=edge,chrome=1');
+
+$hasSidebar = page_findnearest($conf['sidebar']);
+$showSidebar = $hasSidebar && ($ACT=='show');
+?><!DOCTYPE html>
+<html lang="<?php echo $conf['lang'] ?>" dir="<?php echo $lang['direction'] ?>" class="no-js">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title><?php tpl_pagetitle()?> [<?php echo config_get( 'window_title' )?>]</title>
-
-  <?php tpl_metaheaders()?>
-
-  <link rel="shortcut icon" href="<?php echo DOKU_TPL?>images/favicon.ico" />
-
-  <?php /*old includehook*/ @include(dirname(__FILE__).'/meta.html')?>
+    <meta charset="utf-8" />
+    <title><?php tpl_pagetitle() ?> [<?php echo strip_tags($conf['title']) ?>]</title>
+    <script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script>
+    <?php tpl_metaheaders() ?>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <?php echo tpl_favicon(array('favicon', 'mobile')) ?>
+    <?php tpl_includeFile('meta.html') ?>
 </head>
 
 <body>
-<?php /*old includehook*/ 
-@include(dirname(__FILE__).'/topheader.html')
-?>
-<div class="dokuwiki">
-  <?php html_msgarea()?>
+    <!--[if lte IE 7 ]><div id="IE7"><![endif]--><!--[if IE 8 ]><div id="IE8"><![endif]-->
+    <div id="dokuwiki__site"><div id="dokuwiki__top" class="site <?php echo tpl_classes(); ?> <?php
+        echo ($showSidebar) ? 'showSidebar' : ''; ?> <?php echo ($hasSidebar) ? 'hasSidebar' : ''; ?>">
 
-  <div class="stylehead">
+        <?php include('tpl_header.php') ?>
 
-    <div class="header">
-      <div class="pagename">
-        [[<?php tpl_link(wl($ID,'do=backlink'),$ID)?>]]
-      </div>
-      <div class="logo">
-        <!--
-			<?php tpl_link(wl(),$conf['title'],'name="dokuwiki__top" id="dokuwiki__top" accesskey="h" title="[ALT+H]"')?>
-		-->
-      </div>
+        <div class="wrapper group">
 
-      <div class="clearer"></div>
-    </div>
+            <?php if($showSidebar): ?>
+                <!-- ********** ASIDE ********** -->
+                <div id="dokuwiki__aside"><div class="pad aside include group">
+                    <h3 class="toggle"><?php echo $lang['sidebar'] ?></h3>
+                    <div class="content">
+                        <?php tpl_flush() ?>
+                        <?php tpl_includeFile('sidebarheader.html') ?>
+                        <?php tpl_include_page($conf['sidebar'], 1, 1) ?>
+                        <?php tpl_includeFile('sidebarfooter.html') ?>
+                    </div>
+                </div></div><!-- /aside -->
+            <?php endif; ?>
 
-    <?php /*old includehook*/ @include(dirname(__FILE__).'/header.html')?>
+            <!-- ********** CONTENT ********** -->
+            <div id="dokuwiki__content"><div class="pad group">
 
-    <div class="bar" id="bar__top">
-      <div class="bar-left" id="bar__topleft">
-        <?php tpl_button('edit')?>
-        <?php tpl_button('history')?>
-      </div>
+                <div class="pageId"><span><?php echo hsc($ID) ?></span></div>
 
-      <div class="bar-right" id="bar__topright">
-        <?php tpl_button('recent')?>
-        <?php tpl_searchform()?>&nbsp;
-      </div>
+                <div class="page group">
+                    <?php tpl_flush() ?>
+                    <?php tpl_includeFile('pageheader.html') ?>
+                    <!-- wikipage start -->
+                    <?php tpl_content() ?>
+                    <!-- wikipage stop -->
+                    <?php tpl_includeFile('pagefooter.html') ?>
+                </div>
 
-      <div class="clearer"></div>
-    </div>
+                <div class="docInfo"><?php tpl_pageinfo() ?></div>
 
-    <?php if($conf['breadcrumbs']){?>
-    <div class="breadcrumbs">
-      <?php #tpl_breadcrumbs()?>
-      <?php //tpl_youarehere() //(some people prefer this)?>
-    </div>
-    <?php }?>
+                <?php tpl_flush() ?>
+            </div></div><!-- /content -->
 
-    <?php if($conf['youarehere']){?>
-    <div class="breadcrumbs">
-      <?php #tpl_youarehere() ?>
-    </div>
-    <?php }?>
+            <hr class="a11y" />
 
-  </div>
-  <?php flush()?>
+            <!-- PAGE ACTIONS -->
+            <div id="dokuwiki__pagetools">
+                <h3 class="a11y"><?php echo $lang['page_tools']; ?></h3>
+                <div class="tools">
+                    <ul>
+                        <?php
+                            $data = array(
+                                'view'  => 'main',
+                                'items' => array(
+                                    'edit'      => tpl_action('edit',      1, 'li', 1, '<span>', '</span>'),
+                                    'revert'    => tpl_action('revert',    1, 'li', 1, '<span>', '</span>'),
+                                    'revisions' => tpl_action('revisions', 1, 'li', 1, '<span>', '</span>'),
+                                    'backlink'  => tpl_action('backlink',  1, 'li', 1, '<span>', '</span>'),
+                                    'subscribe' => tpl_action('subscribe', 1, 'li', 1, '<span>', '</span>'),
+                                    'top'       => tpl_action('top',       1, 'li', 1, '<span>', '</span>')
+                                )
+                            );
 
-  <div class="page">
-    <!-- wikipage start -->
-    <?php tpl_content()?>
-    <!-- wikipage stop -->
-  </div>
+                            // the page tools can be amended through a custom plugin hook
+                            $evt = new Doku_Event('TEMPLATE_PAGETOOLS_DISPLAY', $data);
+                            if($evt->advise_before()){
+                                foreach($evt->data['items'] as $k => $html) echo $html;
+                            }
+                            $evt->advise_after();
+                            unset($data);
+                            unset($evt);
+                        ?>
+                    </ul>
+                </div>
+            </div>
+        </div><!-- /wrapper -->
 
-  <div class="clearer">&nbsp;</div>
+        <?php include('tpl_footer.php') ?>
+    </div></div><!-- /site -->
 
-  <?php flush()?>
-
-   <?php /*old includehook*/ @include(dirname(__FILE__).'/pagefooter.html')?>
-
-  <div class="stylefoot">
-
-    <div class="meta">
-      <div class="user">
-        <?php tpl_userinfo()?>
-      </div>
-      <div class="doc">
-        <?php tpl_pageinfo()?>
-      </div>
-    </div>
-
-    <div class="bar" id="bar__bottom">
-      <div class="bar-left" id="bar__bottomleft">
-        <?php tpl_button('edit')?>
-        <?php tpl_button('history')?>
-      </div>
-      <div class="bar-right" id="bar__bottomright">
-        <?php tpl_button('subscription')?>
-        <?php tpl_button('admin')?>
-        <?php tpl_button('profile')?>
-        <?php tpl_button('login')?>
-        <?php tpl_button('index')?>
-        <?php tpl_button('top')?>&nbsp;
-      </div>
-      <div class="clearer"></div>
-    </div>
-
-  </div>
-
-</div>
-<?php /*old includehook*/ @include(dirname(__FILE__).'/footer.html')?>
-
-<div class="no"><?php tpl_indexerWebBug()?></div>
-
+    <div class="no"><?php tpl_indexerWebBug() /* provide DokuWiki housekeeping, required in all templates */ ?></div>
+    <div id="screen__mode" class="no"></div><?php /* helper to detect CSS media query in script.js */ ?>
+    <!--[if ( lte IE 7 | IE 8 ) ]></div><![endif]-->
 </body>
 </html>
