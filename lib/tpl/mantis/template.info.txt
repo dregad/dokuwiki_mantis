@@ -1,7 +1,7 @@
 base     mantis
 author   Damien Regad
 email    dregad@mantisbt.org
-date     2015-02-07
-name     MantisBT Wiki Template 2015
-desc     MantisBT Wiki template derived from 'dokuwiki' template
+date     2018-01-28
+name     MantisBT Wiki Template 2018
+desc     MantisBT Wiki template derived from 'dokuwiki' template 2015-07-26
 url      http://www.dokuwiki.org/template:dokuwiki
